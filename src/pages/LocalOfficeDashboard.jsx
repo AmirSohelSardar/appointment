@@ -8,10 +8,9 @@ export default function LocalOfficeDashboard() {
   const [verified, setVerified] = useState([]);
   const [selected, setSelected] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpValidated, setOtpValidated] = useState(false);
 
-  // -----------------------------
-  // Load Candidates
-  // -----------------------------
   useEffect(() => {
     loadCandidates();
   }, []);
@@ -33,51 +32,83 @@ export default function LocalOfficeDashboard() {
     }
   };
 
-  // -----------------------------
-  // Selecting a Candidate
-  // -----------------------------
   const selectCandidate = (cand) => {
     setSelected({ ...cand });
     setIsEditing(false);
+    setOtp("");
+    setOtpValidated(false);
   };
 
-  // -----------------------------
-  // Save Edited Bank + Salary
-  // -----------------------------
-  const saveChanges = async () => {
-    try {
-      await api.put(`/candidates/verify/${selected._id}`, {
-        bank: selected.bank,
-        salaryScale: selected.salaryScale,
-      });
+  const validateOtp = () => {
+    if (!otp) {
+      alert("⚠️ Please enter OTP");
+      return;
+    }
 
-      alert("Verified successfully!");
-      loadCandidates();
-      setIsEditing(false);
-    } catch (err) {
-      alert("Failed to update.");
+    if (otp.length !== 6) {
+      alert("⚠️ OTP must be 6 digits");
+      return;
+    }
+
+    if (selected.verificationOtp === otp) {
+      setOtpValidated(true);
+      alert("✅ OTP Validated Successfully! You can now verify the candidate.");
+    } else {
+      alert("❌ Invalid OTP. Please check and try again.");
+      setOtpValidated(false);
     }
   };
 
-  // -----------------------------
-  // Send to Treasury
-  // -----------------------------
+  const saveChanges = async () => {
+    // If OTP already used, allow direct update without OTP validation
+    if (!selected.otpUsed && !otpValidated) {
+      alert("⚠️ Please validate OTP first!");
+      return;
+    }
+
+    try {
+      // Prepare payload
+      const payload = {
+        bank: selected.bank || {},
+        salaryScale: selected.salaryScale || ""
+      };
+
+      // Add OTP only for first-time verification
+      if (!selected.otpUsed) {
+        payload.otp = otp;
+      }
+
+      const response = await api.put(`/candidates/verify/${selected._id}`, payload);
+
+      alert(selected.otpUsed ? "✅ Updated successfully!" : "✅ Verified successfully!");
+      
+      // Update the selected candidate with the response data to reflect otpUsed change
+      if (response.data && response.data.candidate) {
+        setSelected({ ...response.data.candidate });
+      }
+      
+      await loadCandidates();
+      setIsEditing(false);
+      setOtp("");
+      setOtpValidated(false);
+    } catch (err) {
+      alert(err.response?.data?.message || "❌ Failed to save. Please try again.");
+    }
+  };
+
   const sendToTreasury = async () => {
     if (!window.confirm("Are you sure you want to send this candidate to Treasury?")) return;
 
     try {
       await api.put(`/candidates/sendtotreasury/${selected._id}`);
-      alert("Sent to Treasury");
-      loadCandidates();
+      alert("✅ Sent to Treasury");
+      await loadCandidates();
       setSelected(null);
     } catch (err) {
-      alert("Failed to send");
+      alert(err.response?.data?.message || "Failed to send to treasury");
     }
   };
 
-  // -----------------------------
-  // UI Rendering
-  // -----------------------------
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-4 md:p-8">
       
@@ -142,7 +173,7 @@ export default function LocalOfficeDashboard() {
       {/* THREE COLUMN GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* ------------------- PENDING ------------------- */}
+        {/* PENDING */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-6 h-fit">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/20">
             <div className="bg-amber-500 p-2 rounded-lg">
@@ -183,7 +214,7 @@ export default function LocalOfficeDashboard() {
           </div>
         </div>
 
-        {/* ------------------- VERIFIED ------------------- */}
+        {/* VERIFIED */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-6 h-fit">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/20">
             <div className="bg-emerald-500 p-2 rounded-lg">
@@ -227,7 +258,7 @@ export default function LocalOfficeDashboard() {
           </div>
         </div>
 
-        {/* ------------------- DETAILS PANEL ------------------- */}
+        {/* DETAILS PANEL */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-6 h-fit">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/20">
             <div className="bg-blue-500 p-2 rounded-lg">
@@ -269,6 +300,10 @@ export default function LocalOfficeDashboard() {
                     <p className="text-white font-semibold">{selected.phone}</p>
                   </div>
                   <div className="col-span-2">
+                    <p className="text-white/60 text-sm mb-1">Email</p>
+                    <p className="text-white">{selected.email}</p>
+                  </div>
+                  <div className="col-span-2">
                     <p className="text-white/60 text-sm mb-1">Address</p>
                     <p className="text-white">{selected.address}</p>
                   </div>
@@ -278,6 +313,76 @@ export default function LocalOfficeDashboard() {
                   </div>
                 </div>
               </div>
+
+              {/* OTP VERIFICATION - ONLY FOR FIRST TIME */}
+              {!selected.otpUsed && (
+                <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <svg className="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <h3 className="text-lg font-bold text-white">OTP Verification Required</h3>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-white/80 text-sm font-medium block mb-2">
+                        🔐 Enter 6-Digit OTP
+                      </label>
+                      <div className="flex gap-2">
+                       <input
+                          type="text"
+                          maxLength="6"
+                          className="flex-1 bg-white/10 border border-white/20 text-white text-center text-lg font-bold tracking-widest p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="000000"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                          disabled={otpValidated}
+                        />
+                        <button
+                          onClick={validateOtp}
+                          disabled={otpValidated || otp.length !== 6}
+                          className={`px-4 py-2.5 rounded-lg font-semibold transition-all whitespace-nowrap text-sm ${
+                            otpValidated
+                              ? "bg-green-500 text-white cursor-default"
+                              : otp.length === 6
+                              ? "bg-purple-500 hover:bg-purple-600 text-white"
+                              : "bg-white/10 text-white/50 cursor-not-allowed"
+                          }`}
+                        >
+                          {otpValidated ? "✓ Valid" : "Validate"}
+                        </button>
+                      </div>
+                    </div>
+
+                    {otpValidated && (
+                      <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-green-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-green-300 text-sm font-semibold">OTP verified! You can now complete verification.</p>
+                      </div>
+                    )}
+
+                    <p className="text-white/60 text-xs">
+                      📧 OTP was sent to candidate's email: {selected.email}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* OTP ALREADY USED */}
+              {selected.otpUsed && (
+                <div className="bg-green-500/20 border border-green-500/30 rounded-xl p-4 flex items-center gap-3">
+                  <svg className="w-6 h-6 text-green-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <p className="text-green-300 font-semibold">✅ Already Verified</p>
+                    <p className="text-green-200 text-xs">You can edit bank/salary without OTP</p>
+                  </div>
+                </div>
+              )}
 
               {/* BANK & SALARY */}
               <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5">
@@ -327,7 +432,7 @@ export default function LocalOfficeDashboard() {
                       type="number"
                       className="w-full bg-white/10 border border-white/20 text-white p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={!isEditing}
-                      value={selected.salaryScale}
+                      value={selected.salaryScale || ""}
                       onChange={(e) =>
                         setSelected({ ...selected, salaryScale: e.target.value })
                       }
@@ -347,43 +452,43 @@ export default function LocalOfficeDashboard() {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
-                        Edit Information
+                        {selected.otpUsed ? "Edit Information" : "Start Verification"}
                       </button>
 
-                      <button
-                        onClick={saveChanges}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02]"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Verify Candidate
-                      </button>
-
-                      <button
-                        onClick={sendToTreasury}
-                        className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02]"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                        Send to Treasury
-                      </button>
+                      {selected.otpUsed && (
+                        <button
+                          onClick={sendToTreasury}
+                          className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02]"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          </svg>
+                          Send to Treasury
+                        </button>
+                      )}
                     </>
                   ) : (
                     <div className="flex gap-3">
                       <button
                         onClick={saveChanges}
-                        className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02]"
+                        disabled={!selected.otpUsed && !otpValidated}
+                        className={`flex-1 px-6 py-3 rounded-xl shadow-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+                          selected.otpUsed || otpValidated
+                            ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white hover:scale-[1.02]"
+                            : "bg-gray-500/50 text-gray-400 cursor-not-allowed"
+                        }`}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        Save
+                        {selected.otpUsed ? "Update" : "Verify"}
                       </button>
-
                       <button
-                        onClick={() => setIsEditing(false)}
+                        onClick={() => {
+                          setIsEditing(false);
+                          setOtp("");
+                          setOtpValidated(false);
+                        }}
                         className="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 border border-white/20"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
