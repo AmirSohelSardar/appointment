@@ -85,7 +85,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex flex-col">
 
-      {/* ========== HEADER ========== */}
+    {/* ========== HEADER ========== */}
 <header className="bg-white shadow-lg border-b-4 border-blue-600">
   <div className="max-w-7xl mx-auto px-6 py-8">
 
@@ -115,17 +115,21 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Secure Badge */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3
-                      rounded-full shadow-lg">
-        <p className="text-sm font-bold">🔒 Secure Portal</p>
-      </div>
+      {/* Demo Login Details Download Button */}
+      
+        <a href="/login-credentials.pdf"
+        download="Demo_Login_Details.pdf"
+        className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 
+                   hover:to-emerald-700 text-white px-6 py-3 rounded-full shadow-lg 
+                   transition-all duration-300 transform hover:scale-105 cursor-pointer"
+      >
+        <p className="text-sm font-bold">📥 Demo Login Details</p>
+      </a>
 
     </div>
 
   </div>
 </header>
-
 
       {/* ========== MAIN CONTENT ========== */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
