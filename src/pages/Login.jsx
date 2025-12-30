@@ -396,7 +396,7 @@ export default function Login() {
             </div>
             
             <div className="text-xs text-gray-400">
-              <p>Developed with ❤️ by <span className="text-white font-semibold">Amir Sohel & Momitul</span></p>
+              <p>Developed with ❤️ by <span className="text-white font-semibold">Amir Sohel</span></p>
             </div>
           </div>
         </div>

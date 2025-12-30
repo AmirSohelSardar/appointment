@@ -651,7 +651,7 @@ export default function HeadOfficeDashboard() {
       <footer className="mt-12 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 text-white py-6">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <p className="text-sm">© 2025 Government of West Bengal | Department of Higher Education</p>
-          <p className="text-xs text-gray-400 mt-2">Head Office Administration Portal • Developed with ❤️ by Amir Sohel & Momitul</p>
+          <p className="text-xs text-gray-400 mt-2">Head Office Administration Portal • Developed with ❤️ by Amir Sohel</p>
         </div>
       </footer>
     </div>
