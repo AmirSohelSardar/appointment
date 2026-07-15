@@ -76,7 +76,7 @@ export default function CandidateDashboard() {
       doc.text("Blockchain-Enabled Job Appointment Management System", pageW / 2, margin + 30, { align: "center" });
       doc.setFont("times", "normal");
       doc.setFontSize(13);
-      doc.text("Department of Higher Education", pageW / 2, margin + 48, { align: "center" });
+      doc.text("Smart Job Management Portal", pageW / 2, margin + 48, { align: "center" });
 
       // Title
       doc.setFont("times", "bold");
@@ -147,7 +147,7 @@ export default function CandidateDashboard() {
       doc.setFont("times", "normal");
       doc.setFontSize(11);
       doc.text("Authorized Signatory", sigX, sigY + sigH + 16);
-      doc.text("Department of Higher Education", sigX, sigY + sigH + 32);
+      doc.text("Smart Job Management Portal", sigX, sigY + sigH + 32);
 
       // Footer
       doc.setFontSize(10);
@@ -197,7 +197,7 @@ export default function CandidateDashboard() {
       doc.text("Blockchain-Enabled Job Appointment Management System", pageW / 2, margin + 25, { align: "center" });
       doc.setFont("times", "normal");
       doc.setFontSize(12);
-      doc.text("Department of Higher Education", pageW / 2, margin + 40, { align: "center" });
+      doc.text("Smart Job Management Portal", pageW / 2, margin + 40, { align: "center" });
 
       // Title
       doc.setFont("times", "bold");
@@ -596,7 +596,7 @@ export default function CandidateDashboard() {
       {/* FOOTER */}
       <footer className="bg-gray-900 text-gray-300 py-6 mt-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-sm">© 2025 Government E-Appointment System | Department of Higher Education, West Bengal</p>
+          <p className="text-sm">© 2026 Government E-Appointment System | Smart Job Management Portal, West Bengal</p>
           <p className="text-xs mt-2">Developed by Amir Sohel❤️</p>
         </div>
       </footer>

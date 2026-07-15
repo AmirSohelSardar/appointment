@@ -107,7 +107,7 @@ export default function Login() {
             Blockchain-Enabled Job Appointment Management System
           </h1>
           <p className="text-sm md:text-base text-gray-600 font-semibold mt-1">
-            Department of Higher Education
+            Smart Job Management Portal
           </p>
           <p className="text-xs text-blue-600 font-medium mt-1">
             E-Appointment Management System
@@ -384,7 +384,7 @@ export default function Login() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-center md:text-left">
               <p className="text-sm font-semibold">© 2026 Blockchain-Enabled Job Appointment Management System</p>
-              <p className="text-xs text-gray-400 mt-1">Department of Higher Education</p>
+              <p className="text-xs text-gray-400 mt-1">Smart Job Management Portal</p>
             </div>
             
             <div className="flex items-center gap-6 text-xs text-gray-400">

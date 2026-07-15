@@ -110,7 +110,7 @@ export default function HeadOfficeDashboard() {
       doc.text("Blockchain-Enabled Job Appointment Management System", pageW / 2, margin + 30, { align: "center" });
       doc.setFont("times", "normal");
       doc.setFontSize(13);
-      doc.text("Department of Higher Education", pageW / 2, margin + 48, { align: "center" });
+      doc.text("Smart Job Management Portal", pageW / 2, margin + 48, { align: "center" });
 
       doc.setFont("times", "bold");
       doc.setFontSize(16);
@@ -172,7 +172,7 @@ export default function HeadOfficeDashboard() {
       doc.setFont("times", "normal");
       doc.setFontSize(11);
       doc.text("Authorized Signatory", sigX, sigY + sigH + 16);
-      doc.text("Department of Higher Education", sigX, sigY + sigH + 32);
+      doc.text("Smart Job Management Portal", sigX, sigY + sigH + 32);
 
       doc.setFontSize(10);
       doc.setTextColor(100);
@@ -650,7 +650,7 @@ export default function HeadOfficeDashboard() {
       {/* ========== FOOTER ========== */}
       <footer className="mt-12 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 text-white py-6">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-sm">© 2026 Blockchain-Enabled Job Appointment Management System | Department of Higher Education</p>
+          <p className="text-sm">© 2026 Blockchain-Enabled Job Appointment Management System | Smart Job Management Portal</p>
           <p className="text-xs text-gray-400 mt-2">Head Office Administration Portal • Developed with ❤️ by Amir Sohel</p>
         </div>
       </footer>
