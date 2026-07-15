@@ -104,7 +104,7 @@ export default function Login() {
 
         <div>
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 tracking-tight">
-            Government of West Bengal
+            Blockchain-Enabled Job Appointment Management System
           </h1>
           <p className="text-sm md:text-base text-gray-600 font-semibold mt-1">
             Department of Higher Education
@@ -383,7 +383,7 @@ export default function Login() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-center md:text-left">
-              <p className="text-sm font-semibold">© 2025 Government of West Bengal</p>
+              <p className="text-sm font-semibold">© 2026 Blockchain-Enabled Job Appointment Management System</p>
               <p className="text-xs text-gray-400 mt-1">Department of Higher Education</p>
             </div>
             

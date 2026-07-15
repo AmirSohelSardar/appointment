@@ -107,7 +107,7 @@ export default function HeadOfficeDashboard() {
 
       doc.setFont("times", "bold");
       doc.setFontSize(18);
-      doc.text("GOVERNMENT OF WEST BENGAL", pageW / 2, margin + 30, { align: "center" });
+      doc.text("Blockchain-Enabled Job Appointment Management System", pageW / 2, margin + 30, { align: "center" });
       doc.setFont("times", "normal");
       doc.setFontSize(13);
       doc.text("Department of Higher Education", pageW / 2, margin + 48, { align: "center" });
@@ -146,7 +146,7 @@ export default function HeadOfficeDashboard() {
       writeLabelVal("Address", cand.address || "");
 
       y += 8;
-      const p1 = "You are hereby appointed to the aforementioned post under the Department of Higher Education, Government of West Bengal. This appointment is subject to verification of credentials and completion of all statutory requirements.";
+      const p1 = "You are hereby appointed to the aforementioned post under the Blockchain-Enabled Job Appointment Management System. This appointment is subject to verification of credentials and completion of all statutory requirements.";
       const p2 = "You are directed to report to your assigned institution within 7 working days from the date of receipt of this letter along with original documents for verification.";
 
       const p1Lines = doc.splitTextToSize(p1, pageW - margin - x - 40);
@@ -650,7 +650,7 @@ export default function HeadOfficeDashboard() {
       {/* ========== FOOTER ========== */}
       <footer className="mt-12 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 text-white py-6">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-sm">© 2025 Government of West Bengal | Department of Higher Education</p>
+          <p className="text-sm">© 2026 Blockchain-Enabled Job Appointment Management System | Department of Higher Education</p>
           <p className="text-xs text-gray-400 mt-2">Head Office Administration Portal • Developed with ❤️ by Amir Sohel</p>
         </div>
       </footer>

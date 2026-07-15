@@ -73,7 +73,7 @@ export default function CandidateDashboard() {
       // Heading center
       doc.setFont("times", "bold");
       doc.setFontSize(18);
-      doc.text("GOVERNMENT OF WEST BENGAL", pageW / 2, margin + 30, { align: "center" });
+      doc.text("Blockchain-Enabled Job Appointment Management System", pageW / 2, margin + 30, { align: "center" });
       doc.setFont("times", "normal");
       doc.setFontSize(13);
       doc.text("Department of Higher Education", pageW / 2, margin + 48, { align: "center" });
@@ -117,7 +117,7 @@ export default function CandidateDashboard() {
       y += 8;
       // Formal paragraph
       const p1 =
-        "You are hereby appointed to the aforementioned post under the Department of Higher Education, Government of West Bengal. This appointment is subject to verification of credentials and completion of all statutory requirements.";
+        "You are hereby appointed to the aforementioned post under the Blockchain-Enabled Job Appointment Management System. This appointment is subject to verification of credentials and completion of all statutory requirements.";
       const p2 =
         "You are directed to report to your assigned institution within 7 working days from the date of receipt of this letter along with original documents for verification.";
 
@@ -194,7 +194,7 @@ export default function CandidateDashboard() {
       // Header
       doc.setFont("times", "bold");
       doc.setFontSize(18);
-      doc.text("GOVERNMENT OF WEST BENGAL", pageW / 2, margin + 25, { align: "center" });
+      doc.text("Blockchain-Enabled Job Appointment Management System", pageW / 2, margin + 25, { align: "center" });
       doc.setFont("times", "normal");
       doc.setFontSize(12);
       doc.text("Department of Higher Education", pageW / 2, margin + 40, { align: "center" });
@@ -337,7 +337,7 @@ export default function CandidateDashboard() {
       doc.setFontSize(9);
       doc.setTextColor(80);
       doc.text(
-        `Generated on: ${new Date().toLocaleString()} | Government of West Bengal`,
+        `Generated on: ${new Date().toLocaleString()} | Blockchain-Enabled Job Appointment Management System`,
         pageW / 2,
         pageH - margin - 20,
         { align: "center" }
